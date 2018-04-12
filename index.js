@@ -46,10 +46,23 @@ let Header = function() {
     ]);    
 }
 
-let Post = function(object) {
+let deleteButtonEventHandler = function() {
+    console.log("I clicked delete on a post. Which one? Well, that's a different story.");
+    update();
+}
+
+// let deleteButtonEventHandler = function(postToDelete) {
+//     console.log("I clicked delete on the " + postToDelete.title + " post.");
+//     update();
+// }
+
+
+
+let Post = function(aPost) {
     return h("div", null, [
-        h("h4", null, object.title),
-        h("p", null, object.body)
+        h("h3", null, aPost.title),
+        h("p", null, aPost.body),
+        h("button", {onClick: deleteButtonEventHandler}, "Delete")
     ]);
 }
 
@@ -75,7 +88,11 @@ let Page = function() {
     ]);
 }
 
-ReactDOM.render(h(Page, null, []), root);
+let update = function() {
+    ReactDOM.render(h(Page, null, []), root);
+}
+
+update();
 
 // simple React exercise
 // let Greeting = function(name) {
