@@ -46,15 +46,11 @@ let Header = function() {
     ]);    
 }
 
-let deleteButtonEventHandler = function() {
-    console.log("I clicked delete on a post. Which one? Well, that's a different story.");
+
+let deleteButtonEventHandler = function(postToDelete) {
+    console.log("I clicked delete on the " + postToDelete.title + " post.");
     update();
 }
-
-// let deleteButtonEventHandler = function(postToDelete) {
-//     console.log("I clicked delete on the " + postToDelete.title + " post.");
-//     update();
-// }
 
 
 
@@ -62,7 +58,7 @@ let Post = function(aPost) {
     return h("div", null, [
         h("h3", null, aPost.title),
         h("p", null, aPost.body),
-        h("button", {onClick: deleteButtonEventHandler}, "Delete")
+        h("button", {onClick: () => deleteButtonEventHandler(aPost)}, "Delete")
     ]);
 }
 
