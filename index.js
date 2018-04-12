@@ -46,12 +46,14 @@ let Header = function() {
     ]);    
 }
 
-
+// refactor with .filter?
 let deleteButtonEventHandler = function(postToDelete) {
-    console.log("I clicked delete on the " + postToDelete.title + " post.");
+    console.log("I clicked delete on the " + "'" + postToDelete.title + "'" + " post.");
+    blogPosts.forEach(function(element, index) {
+        if (postToDelete.id === element.id) {blogPosts.splice(index, 1)}
+    });
     update();
 }
-
 
 
 let Post = function(aPost) {
@@ -62,6 +64,7 @@ let Post = function(aPost) {
     ]);
 }
 
+// refactor with .map
 let BlogList = function(object) {
     let array = object.list;
     let newArray = [];
@@ -72,9 +75,11 @@ let BlogList = function(object) {
     return newArray;
 }
 
+
 let Footer = function() {
     return h("p", null, "Copyright 2018");
 }
+
 
 let Page = function() {
     return h("main", null, [
@@ -84,11 +89,15 @@ let Page = function() {
     ]);
 }
 
+
 let update = function() {
     ReactDOM.render(h(Page, null, []), root);
 }
 
+
 update();
+
+// Object.assign({}, originalObject);
 
 // simple React exercise
 // let Greeting = function(name) {
