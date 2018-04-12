@@ -24,10 +24,14 @@ let blogPosts = [
     }
 ]
 
+let blogPostsObject = {
+    list: blogPosts
+}
+
 let Greeting = function(object) {
     let x = object.name;
     let y = object.surname;
-    return h("h1", {className: z}, "Hello, " + x + " " + y);
+    return h("h1", null, "Hello, " + x + " " + y);
 }
 
 
@@ -44,15 +48,19 @@ let Header = function() {
 
 let Post = function(object) {
     return h("div", null, [
-        h("h4", null, object.blogPosts.title),
-        h("p", null, object.blogPosts.body)
+        h("h4", null, object.title),
+        h("p", null, object.body)
     ]);
 }
 
 let BlogList = function(object) {
-    return h("div", null, object.blogPosts.map(function() {
-        h(Post, object, [])
-    }));
+    let array = object.list;
+    let newArray = [];
+    array.forEach(element => {
+        let newElement = h(Post, element, []);
+        newArray.push(newElement);
+    });
+    return newArray;
 }
 
 let Footer = function() {
@@ -62,8 +70,8 @@ let Footer = function() {
 let Page = function() {
     return h("main", null, [
         h(Header, user, []),
-        h(BlogList, {object: blogPosts}, []),
-        h(Footer, {}, [])
+        h(BlogList, blogPostsObject, []),
+        h(Footer, null, [])
     ]);
 }
 
