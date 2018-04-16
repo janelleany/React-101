@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.Post-container {
+    margin-bottom: 12px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.button {
+    width: fit-content;
+}

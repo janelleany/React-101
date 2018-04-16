@@ -28,19 +28,23 @@ let blogPostsObject = {
     list: blogPosts
 }
 
-let Greeting = function(object) {
-    let x = object.name;
-    let y = object.surname;
-    return h("h1", null, "Hello, " + x + " " + y);
+let isAPostBeingEdited = false;
+
+let editedPostId = "";
+
+let Greeting = function(user) {
+    let x = user.name;
+    let y = user.surname;
+    return h("p", {className: "Greeting-container"}, "Hello, " + x + " " + y);
 }
 
 
 let LogoBox = function() {
-    return h("h1", null, "Janelle's Awesome Blog");
+    return h("h1", {className: "LogoBox-container"}, "Janelle's Awesome Blog");
 }
 
 let Header = function() {
-    return h("div", null, [
+    return h("div", {className: "Header-container"}, [
         h(Greeting, user, []),
         h(LogoBox, null, [])
     ]);    
@@ -55,13 +59,35 @@ let deleteButtonEventHandler = function(postToDelete) {
     update();
 }
 
+let editButtonEventHandler = function(postBeingEdited) {
+    console.log("I'm tryna edit this post: " + postBeingEdited.title);
+    editedPostId = postBeingEdited.id;
+    console.log(editedPostId);
+    isAPostBeingEdited = true;
+    update();
+}
+
 
 let Post = function(aPost) {
-    return h("div", null, [
-        h("h3", null, aPost.title),
-        h("p", null, aPost.body),
-        h("button", {onClick: () => deleteButtonEventHandler(aPost)}, "Delete")
-    ]);
+    if (isAPostBeingEdited && aPost.id === editedPostId) {
+        return h("div", {className: "Post-container"}, [
+            h("h3", null, aPost.title),
+            h("p", null, aPost.body),
+            h("button", {onClick: () => deleteButtonEventHandler(aPost), className: "button"}, "Delete"),
+            h("button", {onClick: () => editButtonEventHandler(aPost), className: "button"}, "Edit"),
+            h("form", className="form", [
+                h("input", null),
+                h("input", null)
+            ]),
+        ]);
+    } else {
+        return h("div", {className: "Post-container"}, [
+            h("h3", null, aPost.title),
+            h("p", null, aPost.body),
+            h("button", {onClick: () => deleteButtonEventHandler(aPost), className: "button"}, "Delete"),
+            h("button", {onClick: () => editButtonEventHandler(aPost), className: "button"}, "Edit")
+        ]);
+    }
 }
 
 // refactor with .map
@@ -83,21 +109,28 @@ let Footer = function() {
 
 let Page = function() {
     return h("main", null, [
-        h(Header, user, []),
-        h(BlogList, blogPostsObject, []),
-        h(Footer, null, [])
+        h(Header, user),
+        h(BlogList, blogPostsObject),
+        h(Footer, null)
     ]);
 }
 
 
 let update = function() {
-    ReactDOM.render(h(Page, null, []), root);
+    ReactDOM.render(h(Page, null), root);
 }
 
 
 update();
 
 // Object.assign({}, originalObject);
+
+// class myComponent extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = blogs: props.blogs };
+//     }
+// }
 
 // simple React exercise
 // let Greeting = function(name) {
