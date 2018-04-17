@@ -25,7 +25,7 @@ let blogPosts = [
 ]
 
 let blogPostsObject = {
-    list: blogPosts
+    listOfBlogPosts: blogPosts
 }
 
 let isAPostBeingEdited = false;
@@ -52,7 +52,6 @@ let Header = function() {
 
 // refactor with .filter?
 let deleteButtonEventHandler = function(postToDelete) {
-    console.log("I clicked delete on the " + "'" + postToDelete.title + "'" + " post.");
     blogPosts.forEach(function(element, index) {
         if (postToDelete.id === element.id) {blogPosts.splice(index, 1)}
     });
@@ -60,26 +59,45 @@ let deleteButtonEventHandler = function(postToDelete) {
 }
 
 let editButtonEventHandler = function(postBeingEdited) {
-    console.log("I'm tryna edit this post: " + postBeingEdited.title);
-    editedPostId = postBeingEdited.id;
-    console.log(editedPostId);
     isAPostBeingEdited = true;
+    editedPostId = postBeingEdited.id;
     update();
 }
 
+let editTitleHandler = function(postBeingEdited, newTitle) {
+    blogPosts.forEach(function(element) {
+        if (postBeingEdited.id === element.id) {
+            element.title = newTitle;
+        }
+    });
+    update();
+}
+
+
+let editBodyHandler = function(postBeingEdited, newBody) {
+    blogPosts.forEach(function(element) {
+        if (postBeingEdited.id === element.id) {
+            element.body = newBody;
+        }
+    });
+    update();
+}
+
+let submitButtonEventHandler = function() {
+    isAPostBeingEdited = false;
+    editedPostId = "";
+    update();
+}
 
 let Post = function(aPost) {
     if (isAPostBeingEdited && aPost.id === editedPostId) {
         return h("div", {className: "Post-container"}, [
             h("h3", null, aPost.title),
             h("p", null, aPost.body),
-            h("button", {onClick: () => deleteButtonEventHandler(aPost), className: "button"}, "Delete"),
-            h("button", {onClick: () => editButtonEventHandler(aPost), className: "button"}, "Edit"),
-            h("form", className="form", [
-                h("input", null),
-                h("input", null)
-            ]),
-        ]);
+            h("input", {onChange: (event) => editTitleHandler(aPost, event.target.value)}),
+            h("input", {onChange: (event) => editBodyHandler(aPost, event.target.value)}),
+            h("button", {onClick: () => submitButtonEventHandler(aPost)}, "Save Changes")
+            ]);
     } else {
         return h("div", {className: "Post-container"}, [
             h("h3", null, aPost.title),
@@ -90,12 +108,14 @@ let Post = function(aPost) {
     }
 }
 
+
+
 // refactor with .map
-let BlogList = function(object) {
-    let array = object.list;
+let BlogList = function(objectFullOfBlogPosts) {
+    let array = objectFullOfBlogPosts.listOfBlogPosts;
     let newArray = [];
-    array.forEach(element => {
-        let newElement = h(Post, element, []);
+    array.forEach(element => { 
+        let newElement = h(Post, element ); // THE ELEMENT OBJECT...PASS IN USEFUL "STATE" DATA
         newArray.push(newElement);
     });
     return newArray;
@@ -108,9 +128,10 @@ let Footer = function() {
 
 
 let Page = function() {
-    return h("main", null, [
+    return h("main", {
+        className: "Main"}, [
         h(Header, user),
-        h(BlogList, blogPostsObject),
+        h("div", {className: "BlogList-container"}, [h(BlogList, blogPostsObject)]),
         h(Footer, null)
     ]);
 }
