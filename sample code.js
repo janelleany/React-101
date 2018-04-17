@@ -45,3 +45,27 @@ let theBestWayToDoWrapper = h('div', null, [
     h(ComponentFunction, {props.name: "Janelle"}, []),
     h(AnotherComponentFunction)
 ])
+
+
+// simple React exercise
+// let Greeting = function(name) {
+//     return h("h1", null, "What up, homey?");
+// }
+
+// let Message = function() {
+//     return h("p", null, "React is interesting.")
+// }
+
+// let Footer = function() {
+//     return h("p", null, "Copyright 2020");
+// }
+
+// let Template = function() {
+//     return h("div", null, [
+//         h(Greeting, null, []),
+//         h(Message, null, []),
+//         h(Footer, null, [])
+//     ]);
+// }
+
+// 
