@@ -24,50 +24,134 @@ let blogPosts = [
     }
 ]
 
-let Greeting = function(object) {
-    let x = object.name;
-    let y = object.surname;
-    return h("h1", {className: z}, "Hello, " + x + " " + y);
+let blogPostsObject = {
+    listOfBlogPosts: blogPosts
+}
+
+let isAPostBeingEdited = false;
+
+let editedPostId = "";
+
+let Greeting = function(user) {
+    let x = user.name;
+    let y = user.surname;
+    return h("p", {className: "Greeting-container"}, "Hello, " + x + " " + y);
 }
 
 
 let LogoBox = function() {
-    return h("h1", null, "Janelle's Awesome Blog");
+    return h("h1", {className: "LogoBox-container"}, "Janelle's Awesome Blog");
 }
 
 let Header = function() {
-    return h("div", null, [
+    return h("div", {className: "Header-container"}, [
         h(Greeting, user, []),
         h(LogoBox, null, [])
     ]);    
 }
 
-let Post = function(object) {
-    return h("div", null, [
-        h("h4", null, object.blogPosts.title),
-        h("p", null, object.blogPosts.body)
-    ]);
+// refactor with .filter?
+let deleteButtonEventHandler = function(postToDelete) {
+    blogPosts.forEach(function(element, index) {
+        if (postToDelete.id === element.id) {blogPosts.splice(index, 1)}
+    });
+    update();
 }
 
-let BlogList = function(object) {
-    return h("div", null, object.blogPosts.map(function() {
-        h(Post, object, [])
-    }));
+let editButtonEventHandler = function(postBeingEdited) {
+    isAPostBeingEdited = true;
+    editedPostId = postBeingEdited.id;
+    update();
 }
+
+let editTitleHandler = function(postBeingEdited, newTitle) {
+    blogPosts.forEach(function(element) {
+        if (postBeingEdited.id === element.id) {
+            element.title = newTitle;
+        }
+    });
+    update();
+}
+
+
+let editBodyHandler = function(postBeingEdited, newBody) {
+    blogPosts.forEach(function(element) {
+        if (postBeingEdited.id === element.id) {
+            element.body = newBody;
+        }
+    });
+    update();
+}
+
+let submitButtonEventHandler = function() {
+    isAPostBeingEdited = false;
+    editedPostId = "";
+    update();
+}
+
+let Post = function(aPost) {
+    if (isAPostBeingEdited && aPost.id === editedPostId) {
+        return h("div", {className: "Post-container"}, [
+            h("h3", null, aPost.title),
+            h("p", null, aPost.body),
+            h("input", {onChange: (event) => editTitleHandler(aPost, event.target.value)}),
+            h("input", {onChange: (event) => editBodyHandler(aPost, event.target.value)}),
+            h("button", {onClick: () => submitButtonEventHandler(aPost)}, "Save Changes")
+            ]);
+    } else {
+        return h("div", {className: "Post-container"}, [
+            h("h3", null, aPost.title),
+            h("p", null, aPost.body),
+            h("button", {onClick: () => deleteButtonEventHandler(aPost), className: "button"}, "Delete"),
+            h("button", {onClick: () => editButtonEventHandler(aPost), className: "button"}, "Edit")
+        ]);
+    }
+}
+
+
+
+// refactor with .map
+let BlogList = function(objectFullOfBlogPosts) {
+    let array = objectFullOfBlogPosts.listOfBlogPosts;
+    let newArray = [];
+    array.forEach(element => { 
+        let newElement = h(Post, element ); // THE ELEMENT OBJECT...PASS IN USEFUL "STATE" DATA
+        newArray.push(newElement);
+    });
+    return newArray;
+}
+
 
 let Footer = function() {
     return h("p", null, "Copyright 2018");
 }
 
+
 let Page = function() {
-    return h("main", null, [
-        h(Header, user, []),
-        h(BlogList, {object: blogPosts}, []),
-        h(Footer, {}, [])
+    return h("main", {
+        className: "Main"}, [
+        h(Header, user),
+        h("div", {className: "BlogList-container"}, [h(BlogList, blogPostsObject)]),
+        h(Footer, null)
     ]);
 }
 
-ReactDOM.render(h(Page, null, []), root);
+
+let update = function() {
+    ReactDOM.render(h(Page, null), root);
+}
+
+
+update();
+
+// Object.assign({}, originalObject);
+
+// class myComponent extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = blogs: props.blogs };
+//     }
+// }
 
 // simple React exercise
 // let Greeting = function(name) {

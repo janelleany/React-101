@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Main {
+    display: flex;
+    flex-direction: column; 
+}
+
+.BlogList-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.Post-container {
+    margin-bottom: 12px;
+    margin-right: 12px;
+    padding: 6px;
+    width: 400px;
+    height: 212px;
+    background-color: grey;
+}
+
+.button {
+    width: fit-content;
+    padding: 2px;
+}
+
+
